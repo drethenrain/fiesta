@@ -7,4 +7,4 @@ import { connect } from './utils/database';
 connect();
 
 app.use(routes);
-app.listen(3333, () => console.log('started 🚀'));
+app.listen(3000, () => console.log('started 🚀'));

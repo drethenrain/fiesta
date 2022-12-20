@@ -6,14 +6,17 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    username: {
-      type: String,
-      required: true,
+
+    blacklist: {
+      type: Boolean,
+      default: false,
     },
     ip: {
       type: String,
       required: true,
     },
+    money: { type: Number, default: 0 },
+    cooldown: { type: Number, default: 0 },
   },
   {
     timestamps: true,

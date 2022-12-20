@@ -15,35 +15,40 @@ async function getOne(req, res) {
 }
 
 async function create(req, res) {
-  const { _id, username, ip } = req.body;
+  const { _id, ip } = req.body;
 
-  if (
-    (await UserModel.findById(_id)) ||
-    (await UserModel.findOne({ username }))
-  )
+  if (await UserModel.findById(_id))
     return res.json({ message: 'User already exists' });
 
   const user = await UserModel.create({
     _id,
-    username,
     ip,
   });
   res.status(200).json(user);
 }
 
 async function update(req, res) {
-  const { ip } = req.body;
+  const { ip, daily } = req.body;
   const _id = req.params.id;
 
   if (!(await UserModel.findById(_id)))
     return res.status(404).json({ message: 'Not found' });
 
-  UserModel.findOneAndUpdate(
-    { _id },
-    {
-      ip,
-    }
-  ).then((d) => res.sendStatus(200));
+  if (ip)
+    UserModel.findOneAndUpdate(
+      { _id },
+      {
+        $set: { ip },
+      }
+    ).then((d) => res.sendStatus(200));
+
+  if (daily)
+    UserModel.findOneAndUpdate(
+      { _id },
+      {
+        $inc: { money: daily },
+      }
+    ).then(({ money }) => res.status(200).json({ money }));
 }
 
 export { getAll, getOne, create, update };
